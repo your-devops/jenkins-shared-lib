@@ -4,11 +4,22 @@ def call(Map pipelineParams) {
     agent none
     stages {
       stage('Prepare Env Vars') {
+        agent {
+          docker {
+            image 'jakubsacha/docker-xmlstarlet:latest'
+          }
+        }
         steps {
           script {
             // Set default requiredApplicationCoverage for MUnit tests. May be overriden from Job Properties.
             if (env.requiredApplicationCoverage == null) {
               env.requiredApplicationCoverage = "75"
+            // Set tests to fail build if Application Coverage is below required value
+            helper.pomSetMunitConfig("failBuild","true")
+            // Set requiredApplicationCoverage
+            helper.pomSetMunitConfig("requiredApplicationCoverage",requiredApplicationCoverage)
+            // test
+            sh "cat pom.xml"
             }
           }
         }
@@ -22,12 +33,6 @@ def call(Map pipelineParams) {
         }
         steps {
           script {
-            // Set tests to fail build if Application Coverage is below required value
-            helper.pomSetMunitConfig("failBuild","true")
-            // Set requiredApplicationCoverage
-            helper.pomSetMunitConfig("requiredApplicationCoverage",requiredApplicationCoverage)
-            // test
-            sh "cat pom.xml"
             // Run Unit Tests
             configFileProvider([configFile(fileId: 'maven_settings', variable: 'mavenSettingsFile')]) {
               withCredentials([usernamePassword(credentialsId: 'dev-encryptor-pwd', passwordVariable: 'encryptorPasswd', usernameVariable: 'anypointUser')]) {
