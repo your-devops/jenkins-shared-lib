@@ -37,7 +37,7 @@ def call(Map pipelineParams) {
             // Run Unit Tests
             configFileProvider([configFile(fileId: 'maven_settings', variable: 'mavenSettingsFile')]) {
               withCredentials([usernamePassword(credentialsId: 'dev-encryptor-pwd', passwordVariable: 'encryptorPasswd', usernameVariable: 'anypointUser')]) {
-                sh "mvn -s '$mavenSettingsFile' clean test -Denv=${environment} -DmuleKey=${encryptorPasswd}"
+                sh "mvn -s '$mavenSettingsFile' clean test -Denv=${environment} -Dapp.key=${encryptorPasswd}"
               }
             }
           }
