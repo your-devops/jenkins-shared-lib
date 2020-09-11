@@ -16,9 +16,9 @@ def call(Map pipelineParams) {
             if (env.requiredApplicationCoverage == null) {
               env.requiredApplicationCoverage = "75"
             // Set tests to fail build if Application Coverage is below required value
-            helper.pomSetMunitConfig("failBuild","true")
+            helper.pomSetMunitConfig('failBuild','true')
             // Set requiredApplicationCoverage
-            helper.pomSetMunitConfig("requiredApplicationCoverage",requiredApplicationCoverage)
+            helper.pomSetMunitConfig('requiredApplicationCoverage',requiredApplicationCoverage)
             // test
             sh "cat pom.xml"
             }
