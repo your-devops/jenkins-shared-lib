@@ -2,10 +2,6 @@ def call(Map pipelineParams) {
 
   pipeline {
     agent none
-    parameters {
-      string(name: 'appStatusCheckAttempts', defaultValue: "4", description: 'Number of attempts for checking application status after deployment.')
-      string(name: 'appStatusCheckInterval', defaultValue: "60", description: 'Interval, in seconds, between attempts to check application status.')
-    }
     stages {
       stage('Prepare Env Vars') {
         steps {
@@ -14,7 +10,6 @@ def call(Map pipelineParams) {
             if (env.requiredApplicationCoverage == null) {
               env.requiredApplicationCoverage = "75"
             }
-            appStatus = "UNKNOWN"
           }
         }
       }
@@ -31,12 +26,14 @@ def call(Map pipelineParams) {
             helper.pomSetMunitConfig("failBuild","true")
             // Set requiredApplicationCoverage
             helper.pomSetMunitConfig("requiredApplicationCoverage",requiredApplicationCoverage)
+            // test
+            sh "cat pom.xml"
             // Run Unit Tests
-/*             configFileProvider([configFile(fileId: 'maven_settings', variable: 'mavenSettingsFile')]) {
-              withCredentials([usernamePassword(credentialsId: 'anypoint-mule-key', passwordVariable: 'encryptorPasswd', usernameVariable: 'anypointUser')]) {
+            configFileProvider([configFile(fileId: 'maven_settings', variable: 'mavenSettingsFile')]) {
+              withCredentials([usernamePassword(credentialsId: 'dev-encryptor-pwd', passwordVariable: 'encryptorPasswd', usernameVariable: 'anypointUser')]) {
                 sh "mvn -s '$mavenSettingsFile' clean test -Denv=${environment} -DmuleKey=${encryptorPasswd}"
               }
-            } */
+            }
           }
         }
       }
