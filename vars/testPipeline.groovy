@@ -7,6 +7,7 @@ def call(Map pipelineParams) {
         agent {
           docker {
             image 'jakubsacha/docker-xmlstarlet:latest'
+            args "--entrypoint=''"
           }
         }
         steps {
