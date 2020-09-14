@@ -34,6 +34,7 @@ def call(Map pipelineParams) {
         }
         steps {
           script {
+            sh "cat pom.xml"
             // Run Unit Tests
             configFileProvider([configFile(fileId: 'maven_settings', variable: 'mavenSettingsFile')]) {
               withCredentials([usernamePassword(credentialsId: 'dev-encryptor-pwd', passwordVariable: 'encryptorPasswd', usernameVariable: 'anypointUser')]) {
