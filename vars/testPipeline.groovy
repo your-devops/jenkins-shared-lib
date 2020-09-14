@@ -1,7 +1,9 @@
 def call(Map pipelineParams) {
 
   pipeline {
-    agent any
+    agent {
+      label 'master'
+    }
     stages {
       stage('Prepare Env Vars') {
         steps {
