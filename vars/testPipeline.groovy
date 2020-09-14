@@ -10,6 +10,7 @@ def call(Map pipelineParams) {
               // Set default requiredApplicationCoverage for MUnit tests. May be overriden from Job Properties.
               if (env.requiredApplicationCoverage == null) {
                 env.requiredApplicationCoverage = "75"
+              }
               // Set tests to fail build if Application Coverage is below required value
               helper.pomSetMunitConfig('failBuild','true')
               // Set requiredApplicationCoverage
