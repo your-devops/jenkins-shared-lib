@@ -1,7 +1,7 @@
 def call(Map pipelineParams) {
 
   pipeline {
-    agent any
+    agent master
     stages {
       stage('Prepare Env Vars') {
         steps {
@@ -16,8 +16,8 @@ def call(Map pipelineParams) {
               // Set requiredApplicationCoverage
               helper.pomSetMunitConfig('requiredApplicationCoverage',requiredApplicationCoverage)
               // test
+              echo "Building with following pom.xml settings:"
               sh "cat pom.xml"
-              stash(name: "modifiedPomFile", includes: "pom.xml")
             }
           }
         }
@@ -26,7 +26,6 @@ def call(Map pipelineParams) {
         steps {
           script {
             docker.image('maven:3.6-jdk-8').inside("-v $HOME/.m2:/root/.m2 -u root") {
-              sh "cat pom.xml"
               // Run Unit Tests
               configFileProvider([configFile(fileId: 'maven_settings', variable: 'mavenSettingsFile')]) {
                 withCredentials([usernamePassword(credentialsId: 'dev-encryptor-pwd', passwordVariable: 'encryptorPasswd', usernameVariable: 'anypointUser')]) {
@@ -37,26 +36,6 @@ def call(Map pipelineParams) {
           }
         }
       }
-/*       stage('Unit Tests 2') {
-        agent {
-          docker {
-            image 'maven:3.6-jdk-8'
-            args '-v $HOME/.m2:/root/.m2 -u root'
-          }
-        }
-        steps {
-          script {
-            unstash("modifiedPomFile")
-            sh "cat pom.xml"
-            // Run Unit Tests
-            configFileProvider([configFile(fileId: 'maven_settings', variable: 'mavenSettingsFile')]) {
-              withCredentials([usernamePassword(credentialsId: 'dev-encryptor-pwd', passwordVariable: 'encryptorPasswd', usernameVariable: 'anypointUser')]) {
-                sh "mvn -s '$mavenSettingsFile' clean test -Denv=${environment} -Dapp.key=${encryptorPasswd}"
-              }
-            }
-          }
-        }
-      } */
     }
   }
 }
