@@ -6,7 +6,7 @@ def call(Map pipelineParams) {
       stage('Prepare Env Vars') {
         steps {
           script {
-            docker.image('jakubsacha/docker-xmlstarlet:latest').inside {
+            docker.image('jakubsacha/docker-xmlstarlet:latest').inside("--entrypoint=''") {
               // Set default requiredApplicationCoverage for MUnit tests. May be overriden from Job Properties.
               if (env.requiredApplicationCoverage == null) {
                 env.requiredApplicationCoverage = "75"
