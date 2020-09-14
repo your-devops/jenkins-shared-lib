@@ -1,7 +1,7 @@
 def call(Map pipelineParams) {
 
   pipeline {
-    agent master
+    agent any
     stages {
       stage('Prepare Env Vars') {
         steps {
@@ -25,7 +25,7 @@ def call(Map pipelineParams) {
       stage('Unit Tests') {
         steps {
           script {
-            docker.image('maven:3.6-jdk-8').inside("-v $HOME/.m2:/root/.m2 -u root") {
+/*             docker.image('maven:3.6-jdk-8').inside("-v $HOME/.m2:/root/.m2 -u root") {
               // Run Unit Tests
               configFileProvider([configFile(fileId: 'maven_settings', variable: 'mavenSettingsFile')]) {
                 withCredentials([usernamePassword(credentialsId: 'dev-encryptor-pwd', passwordVariable: 'encryptorPasswd', usernameVariable: 'anypointUser')]) {
@@ -33,6 +33,16 @@ def call(Map pipelineParams) {
                 }
               }
             }
+ */
+          sh "echo 'test string to txt file publish to html\n2nd test string' > linter-output.html"
+          publishHTML (target: [
+            allowMissing: true,
+            alwaysLinkToLastBuild: false,
+            keepAll: true,
+            reportDir: '.',
+            reportFiles: 'linter-output.html',
+            reportName: "Linter Output"
+          ])
           }
         }
       }
