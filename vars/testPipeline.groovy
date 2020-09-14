@@ -36,13 +36,14 @@ def call(Map pipelineParams) {
               }
             }
  */
-          sh "echo 'test string to txt file publish to html\n2nd test string' > linter-output.html"
+          sh "echo 'test string to txt file publish to html\n2nd test string' > linter-output.txt"
+          archiveArtifacts artifacts: 'linter-output.txt'
           publishHTML (target: [
             allowMissing: true,
             alwaysLinkToLastBuild: false,
             keepAll: true,
             reportDir: '.',
-            reportFiles: 'linter-output.html',
+            reportFiles: 'linter-output.txt',
             reportName: "Linter Output"
           ])
           }
