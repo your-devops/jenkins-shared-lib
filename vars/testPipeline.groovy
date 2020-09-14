@@ -23,6 +23,21 @@ def call(Map pipelineParams) {
         }
       }
       stage('Unit Tests') {
+        steps {
+          script {
+            docker.image('maven:3.6-jdk-8').inside("-v $HOME/.m2:/root/.m2 -u root") {
+              sh "cat pom.xml"
+              // Run Unit Tests
+              configFileProvider([configFile(fileId: 'maven_settings', variable: 'mavenSettingsFile')]) {
+                withCredentials([usernamePassword(credentialsId: 'dev-encryptor-pwd', passwordVariable: 'encryptorPasswd', usernameVariable: 'anypointUser')]) {
+                  sh "mvn -s '$mavenSettingsFile' clean test -Denv=${environment} -Dapp.key=${encryptorPasswd}"
+                }
+              }
+            }
+          }
+        }
+      }
+/*       stage('Unit Tests 2') {
         agent {
           docker {
             image 'maven:3.6-jdk-8'
@@ -41,7 +56,7 @@ def call(Map pipelineParams) {
             }
           }
         }
-      }
+      } */
     }
   }
 }
