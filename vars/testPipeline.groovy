@@ -53,7 +53,7 @@ def call(Map pipelineParams) {
       always {
         node("master") {
           script {
-            SLACK_REPORT_MSG = "*${currentBuild.currentResult}:* Job <${env.JOB_URL}|${env.JOB_NAME}> <${env.BUILD_URL}console|build #${BUILD_NUMBER}>:\n${currentBuild.getBuildCauses()[0].shortDescription}\nFailed on stage:${LAST_EXECUTED_STAGE}\nTime total: " + sh(script: "echo '${currentBuild.durationString}' | sed 's/and counting//'", returnStdout: true).trim()
+            SLACK_REPORT_MSG = "*${currentBuild.currentResult}:* Job <${env.BUILD_URL}display/redirect|${env.JOB_NAME} build #${BUILD_NUMBER}>:\n${currentBuild.getBuildCauses()[0].shortDescription}\nFailed on stage: ${LAST_EXECUTED_STAGE}\nTime total: " + sh(script: "echo '${currentBuild.durationString}' | sed 's/and counting//'", returnStdout: true).trim()
             echo SLACK_REPORT_MSG
           }
         }
