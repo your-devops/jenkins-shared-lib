@@ -11,7 +11,6 @@ def call(Map pipelineParams) {
           script {
             LAST_EXECUTED_STAGE = STAGE_NAME
             sh "git status"
-            }
           }
         }
       }
