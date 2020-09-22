@@ -19,7 +19,6 @@ def call(Map pipelineParams) {
     post {
       always {
         node("master") {
-          env.BITBUCKET_SOURCE_BRANCH = sh(script: "echo $GIT_BRANCH | grep -oP '(?<=origin/).*'", returnStdout: true).trim()
           jiraSendBuildInfo site: 'yourdevops.atlassian.net', branch: "${env.BITBUCKET_SOURCE_BRANCH}"
           jiraSendDeploymentInfo site: 'example.atlassian.net', environmentId: 'qa-1', environmentName: 'QA-1', environmentType: 'QA'
           script {
