@@ -6,7 +6,7 @@ pipeline {
     stage('Example Test') {
       steps {
         script{
-            helpers\/helloworld.helloworld()
+            helpers/helloworld.helloworld()
         }
       }
     }
