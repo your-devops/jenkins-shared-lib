@@ -11,11 +11,11 @@ pipeline {
       }
     }
   }
-  post {
-    always {
-      script {
+//  post {
+  //  always {
+    //  script {
           //telegram.sendTelegram("Jenkins job ''${JOB_NAME}'' has ended with following result: ${currentBuild.currentResult}. \nYou can check the job status here: ${JOB_URL}")
-      }
-		}
-	}
+    //  }
+	//	}
+	//}
 }
