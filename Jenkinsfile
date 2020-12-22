@@ -5,7 +5,9 @@ agent any
 stages {
     stage('Example Test') {
         steps {
-            helloworld.helloworld()
+            script{
+                helloworld.helloworld()
+            }
         }
        }
      }
